@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +22,6 @@ Route::get('/home', function () {
     return view('pages.dashboard');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('pages.dashboard', ['title' => 'Dashboard']);
-})->name('dashboard');
-
 Route::get('/publications', function () {
     return view('pages.publications');
 })->name('publications');
@@ -44,3 +41,5 @@ Route::get('/tables', function () {
 Route::get('/billing', function () {
     return view('pages.billing');
 })->name('billing');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
