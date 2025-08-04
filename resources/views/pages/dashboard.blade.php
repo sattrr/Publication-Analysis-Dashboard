@@ -109,14 +109,20 @@
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <h6 class="text-capitalize">Publication Trends Over Time</h6>
-                        <p class="text-sm mb-0">
-                            <i class="fa fa-arrow-up text-success"></i>
-                            <!-- <span class="font-weight-bold">4% more</span> in 2021 -->
-                        </p>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="chart">
-                            <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+                            <p class="text-sm mb-0">
+                                <i class="fa fa-arrow-up text-success"></i>
+                                <!-- Optional text here -->
+                            </p>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="chart">
+                                <canvas id="chart-line"
+                                    class="chart-canvas"
+                                    data-years='@json($years)'
+                                    data-totals='@json($totals)'
+                                    height="300">
+                                </canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -394,70 +400,66 @@
     </div>
 @endsection
 
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h3>Statistik Publikasi</h3>
+
+    {{-- ⬇️ Tempatkan canvas di sini --}}
+    <canvas id="chart-line"
+            data-years='@json($years)'
+            data-totals='@json($totals)'
+            height="300"></canvas>
+
+</div>
+@endsection
+
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const canvas = document.getElementById('chart-line');
+        if (!canvas) return;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const canvas = document.getElementById('chart-line');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
+        const years = JSON.parse(canvas.getAttribute('data-years'));
+        const totals = JSON.parse(canvas.getAttribute('data-totals'));
 
-                // Optional gradient background
-                const gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
-                gradientStroke.addColorStop(1, 'rgba(75, 192, 192, 0.2)');
-                gradientStroke.addColorStop(0.2, 'rgba(75, 192, 192, 0.0)');
-                gradientStroke.addColorStop(0, 'rgba(75, 192, 192, 0)');
+        const ctx = canvas.getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 230, 0, 50);
+        gradient.addColorStop(1, 'rgba(75, 192, 192, 0.2)');
+        gradient.addColorStop(0.2, 'rgba(75, 192, 192, 0.0)');
+        gradient.addColorStop(0, 'rgba(75, 192, 192, 0)');
 
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: {!! json_encode($years) !!},
-                        datasets: [{
-                            label: 'Jumlah Publikasi',
-                            data: {!! json_encode($totals) !!},
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: gradientStroke,
-                            tension: 0.4,
-                            fill: true,
-                            borderWidth: 3,
-                            pointRadius: 3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                labels: {
-                                    color: '#333'
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    color: '#333'
-                                },
-                                grid: {
-                                    color: '#eee'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: '#333'
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'Jumlah Publikasi',
+                    data: totals,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: gradient,
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 2,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
                     }
-                });
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
-    </script>
+    });
+</script>
 @endpush
