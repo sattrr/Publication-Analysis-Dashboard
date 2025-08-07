@@ -1,14 +1,15 @@
+<?php
+
+namespace App\Http\Controllers;
+
 use App\Models\Publication;
+use Illuminate\Http\Request;
 
-public function index()
+class PublicationController extends Controller
 {
-    $years = Publication::selectRaw('year, COUNT(*) as total')
-        ->groupBy('year')
-        ->orderBy('year')
-        ->pluck('total', 'year');
-
-    return view('dashboard', [ // ganti 'dashboard' dengan nama blade-mu
-        'years' => $years->keys(),
-        'totals' => $years->values(),
-    ]);
+    public function index()
+    {
+        $publications =  Publication::paginate(25);
+        return view('pages.publications', compact('publications'));
+    }
 }

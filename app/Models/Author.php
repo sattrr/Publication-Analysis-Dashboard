@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Publication extends Model
+class Author extends Model
 {
     use HasFactory;
 
     protected $table = 'penelitian.publikasi';
-    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
@@ -18,11 +17,12 @@ class Publication extends Model
         'id_scopus',
         'nama',
         'judul',
-        'jenis_publikasi',
-        'nama_jurnal',
-        'tautan',
-        'doi',
-        'tahun',
-        'sumber_data'
+        'total_publikasi',
     ];
+
+    public static function uniqueAuthors()
+    {
+        return self::select('nip', 'id_scopus', 'nama', 'judul')
+            ->distinct();
+    }
 }

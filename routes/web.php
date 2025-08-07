@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\AuthorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,14 +24,6 @@ Route::get('/home', function () {
     return view('pages.dashboard');
 })->name('home');
 
-Route::get('/publications', function () {
-    return view('pages.publications');
-})->name('publications');
-
-Route::get('/authors', function () {
-    return view('pages.authors');
-})->name('authors');
-
 Route::get('/user-management', function () {
     return view('pages.user-management');
 })->name('user-management');
@@ -43,3 +37,5 @@ Route::get('/billing', function () {
 })->name('billing');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
+Route::get('/authors', [AuthorController::class, 'index'])->name('authors');
