@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
     <link rel="icon" type="image/png" href="/img/favicon.png">
-    <title>My App Dashboard</title>
+    <title>UM Publication</title>
 
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -18,41 +18,16 @@
 </head>
 
 <body class="{{ $class ?? '' }}">
-    @guest
+    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+
+    @include('layouts.navbars.auth.sidenav')
+
+    <main class="main-content position-relative border-radius-lg ps">
         @yield('content')
-    @endguest
+    </main>
 
-    @auth
-        @php
-            $excludedRoutes = ['sign-in-static', 'sign-up-static', 'login', 'register', 'recover-password', 'rtl', 'virtual-reality'];
-        @endphp
+    @include('components.fixed-plugin')
 
-        @if (in_array(request()->route()->getName(), $excludedRoutes))
-            @yield('content')
-        @else
-            {{-- Background untuk layout --}}
-            @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
-                <div class="min-height-300 bg-primary position-absolute w-100"></div>
-            @else
-                <div class="position-absolute w-100 min-height-300 top-0"
-                    style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
-                    <span class="mask bg-primary opacity-6"></span>
-                </div>
-            @endif
-
-            {{-- Sidebar --}}
-            @include('layouts.navbars.auth.sidenav')
-
-            {{-- Main Content --}}
-            <main class="main-content position-relative border-radius-lg ps">
-                @yield('content')
-            </main>
-
-            @include('components.fixed-plugin')
-        @endif
-    @endauth
-
-    <!-- Core JS Files -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
