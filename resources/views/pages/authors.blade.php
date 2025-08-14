@@ -2,14 +2,41 @@
 
 @section('content')
 <div class="container-fluid py-2">
-    <div class="card">
-        <div class="card-header pb-0">
-            <h6>Daftar Penulis</h6>
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <h6 class="mb-0 fw-bold">Daftar Penulis</h6>
         </div>
-        <div class="card-body p-2">
-            <div class="table-responsive my-2 mx-3">
-                <table class="table table-sm table-striped table-hover small w-100">
-                    <thead class="thead-light">
+        <div class="card-body p-0">
+            <style>
+                .table-compact {
+                    table-layout: fixed;
+                    width: 100%;
+                }
+                .table-compact thead th {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 0.75rem;
+                    padding: 0.4rem 0.5rem;
+                    vertical-align: middle;
+                }
+                .table-compact tbody td {
+                    white-space: normal;
+                    word-break: break-word;
+                    font-size: 0.85rem;
+                    padding: 0.4rem 0.5rem;
+                    vertical-align: top;
+                }
+                .table-container {
+                    max-height: 500px;
+                    overflow-y: auto;
+                    margin: 0 20px;
+                }
+            </style>
+
+            <div class="table-responsive table-container">
+                <table class="table table-sm table-hover align-middle mb-0 table-compact">
+                    <thead class="table-light">
                         <tr>
                             <th style="width: 20%;">NIP</th>
                             <th style="width: 20%;">ID Scopus</th>
@@ -20,40 +47,28 @@
                     <tbody>
                         @forelse ($authors as $author)
                         <tr>
-                            <td>
-                                <div class="text-truncate" style="width: 100%;">
-                                    {{ $author->nip }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-truncate" style="width: 100%;">
-                                    {{ $author->id_scopus }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-truncate" style="width: 100%;">
-                                    {{ $author->nama }}
-                                </div>
-                            </td>
+                            <td>{{ $author->nip }}</td>
+                            <td>{{ $author->id_scopus }}</td>
+                            <td>{{ $author->nama_formatted }}</td>
                             <td>{{ $author->total_publikasi }}</td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center py-3">Belum ada data penulis.</td>
+                            <td colspan="4" class="text-center text-muted py-3">Belum ada data penulis.</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="text-sm text-muted mt-3 ms-2">
-                Menampilkan {{ $authors->firstItem() }}–{{ $authors->lastItem() }} dari {{ $authors->total() }} data penulis
-            </div>
-
-            <div class="d-flex justify-content-center mt-2">
+        @if($authors->count())
+        <div class="card-footer bg-white border-0">
+            <div class="d-flex justify-content-center">
                 {{ $authors->links('pagination::bootstrap-5') }}
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection
