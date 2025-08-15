@@ -7,9 +7,21 @@ use Illuminate\Http\Request;
 
 class PublicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $publications =  Publication::paginate(25);
-        return view('pages.publications', compact('publications'));
+        $sort = $request->get('sort', 'tahun');
+        $direction = $request->get('direction', 'desc');
+
+        // Pastikan kolom yang bisa di-sort
+        $allowedSorts = ['judul', 'nama', 'jenis_publikasi', 'nama_jurnal', 'tahun', 'sumber_data'];
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'tahun';
+        }
+
+        $publications = Publication::orderBy($sort, $direction)
+            ->paginate(25)
+            ->withQueryString();
+
+        return view('pages.publications', compact('publications', 'sort', 'direction'));
     }
 }

@@ -3,8 +3,23 @@
 @section('content')
 <div class="container-fluid py-2">
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-white border-0">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
             <h6 class="mb-0 fw-bold">Daftar Penulis</h6>
+            <form method="GET" action="{{ route('authors') }}" class="d-flex align-items-center">
+                @foreach(request()->except(['sort', 'direction']) as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+                <select name="sort" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                    <option value="nip" {{ $sort === 'nip' ? 'selected' : '' }}>NIP</option>
+                    <option value="id_scopus" {{ $sort === 'id_scopus' ? 'selected' : '' }}>ID Scopus</option>
+                    <option value="nama" {{ $sort === 'nama' ? 'selected' : '' }}>Nama</option>
+                    <option value="total_publikasi" {{ $sort === 'total_publikasi' ? 'selected' : '' }}>Total Publikasi</option>
+                </select>
+                <select name="direction" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="asc" {{ $direction === 'asc' ? 'selected' : '' }}>⬆</option>
+                    <option value="desc" {{ $direction === 'desc' ? 'selected' : '' }}>⬇</option>
+                </select>
+            </form>
         </div>
         <div class="card-body p-0">
             <style>

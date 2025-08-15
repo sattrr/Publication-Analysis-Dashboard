@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $authors = Author::uniqueAuthors()->paginate(25);
-        return view('pages.authors', compact('authors'));
+        $sort = $request->get('sort', 'total_publikasi');
+        $direction = $request->get('direction', 'desc');
+
+        $authors = Author::uniqueAuthors($sort, $direction)
+            ->paginate(25)
+            ->withQueryString();
+
+        return view('pages.authors', compact('authors', 'sort', 'direction'));
     }
 }

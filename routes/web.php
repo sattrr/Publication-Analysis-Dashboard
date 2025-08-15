@@ -24,18 +24,6 @@ Route::get('/home', function () {
     return view('pages.dashboard');
 })->name('home');
 
-Route::get('/user-management', function () {
-    return view('pages.user-management');
-})->name('user-management');
-
-Route::get('/tables', function () {
-    return view('pages.tables');
-})->name('tables');
-
-Route::get('/billing', function () {
-    return view('pages.billing');
-})->name('billing');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
 Route::get('/authors', [AuthorController::class, 'index'])->name('authors');

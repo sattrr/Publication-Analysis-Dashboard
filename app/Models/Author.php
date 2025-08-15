@@ -20,11 +20,11 @@ class Author extends Model
         'total_publikasi',
     ];
 
-    public static function uniqueAuthors()
-    {
-        return self::select('nip', 'id_scopus', 'nama', 'judul')
-            ->distinct();
-    }
+    // public static function uniqueAuthors()
+    // {
+    //     return self::select('nip', 'id_scopus', 'nama', 'judul')
+    //         ->distinct();
+    // }
 
     private function formatTitleCase($text)
     {
@@ -54,5 +54,28 @@ class Author extends Model
     public function getJudulFormattedAttribute()
     {
         return $this->formatTitleCase($this->judul);
+    }
+    public static function uniqueAuthors($sort = 'nama', $direction = 'asc')
+    {
+        $allowedSorts = ['nama', 'nip', 'id_scopus', 'total_publikasi'];
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'nama';
+        }
+
+        $query = self::select(
+                'nama',
+                'nip',
+                'id_scopus'
+            )
+            ->selectRaw('COUNT(*) as total_publikasi')
+            ->groupBy('nama', 'nip', 'id_scopus');
+
+        if ($sort === 'total_publikasi') {
+            $query->orderByRaw('COUNT(*) ' . $direction);
+        } else {
+            $query->orderBy($sort, $direction);
+        }
+
+        return $query;
     }
 }

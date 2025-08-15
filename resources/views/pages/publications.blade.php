@@ -3,8 +3,25 @@
 @section('content')
 <div class="container-fluid py-2">
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-white border-0">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
             <h6 class="mb-0 fw-bold">Daftar Publikasi</h6>
+            <form method="GET" action="{{ route('publications') }}" class="d-flex align-items-center">
+                @foreach(request()->except(['sort', 'direction']) as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+                <select name="sort" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                    <option value="tahun" {{ $sort === 'tahun' ? 'selected' : '' }}>Tahun</option>
+                    <option value="judul" {{ $sort === 'judul' ? 'selected' : '' }}>Judul</option>
+                    <option value="nama" {{ $sort === 'nama' ? 'selected' : '' }}>Author</option>
+                    <option value="jenis_publikasi" {{ $sort === 'jenis_publikasi' ? 'selected' : '' }}>Jenis Publikasi</option>
+                    <option value="nama_jurnal" {{ $sort === 'nama_jurnal' ? 'selected' : '' }}>Nama Jurnal</option>
+                    <option value="sumber_data" {{ $sort === 'sumber_data' ? 'selected' : '' }}>Sumber</option>
+                </select>
+                <select name="direction" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="asc" {{ $direction === 'asc' ? 'selected' : '' }}>⬆</option>
+                    <option value="desc" {{ $direction === 'desc' ? 'selected' : '' }}>⬇</option>
+                </select>
+            </form>
         </div>
         <div class="card-body p-0">
             <style>
@@ -33,7 +50,6 @@
                     margin: 0 20px;
                 }
             </style>
-
             <div class="table-responsive table-container">
                 <table class="table table-sm table-hover align-middle mb-0 table-compact">
                     <thead class="table-light">
@@ -43,9 +59,9 @@
                             <th style="width: 10%">Jenis Publikasi</th>
                             <th style="width: 10%">Nama Jurnal</th>
                             <th style="width: 5%">Tautan</th>
-                            <th style="width: 10%">DOI</th>
+                            <th style="width: 5%">DOI</th>
                             <th style="width: 5%">Tahun</th>
-                            <th style="width: 5%">Sumber</th>
+                            <th style="width: 7%">Sumber</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,7 +91,6 @@
                 </table>
             </div>
         </div>
-
         @if($publications->count())
         <div class="card-footer bg-white border-0">
             <div class="d-flex justify-content-center">

@@ -12,12 +12,8 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Publications</p>
                                     <h5 class="font-weight-bolder">
-                                        29,880
+                                        {{ number_format($totalPublications) }}
                                     </h5>
-                                    <!-- <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+55%</span>
-                                        since yesterday
-                                    </p> -->
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -37,12 +33,8 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Authors</p>
                                     <h5 class="font-weight-bolder">
-                                        2,300
+                                        {{ number_format($totalAuthors) }}
                                     </h5>
-                                    <!-- <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                        since last week
-                                    </p> -->
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -62,12 +54,8 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Journals</p>
                                     <h5 class="font-weight-bolder">
-                                        1,462
+                                        {{ number_format($totalJournals) }}
                                     </h5>
-                                    <!-- <p class="mb-0">
-                                        <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                                        since last quarter
-                                    </p> -->
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -87,11 +75,8 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Topics</p>
                                     <h5 class="font-weight-bolder">
-                                        275
+                                        {{ number_format($totalTopics) }}
                                     </h5>
-                                    <!-- <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+5%</span> than last month
-                                    </p> -->
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -111,7 +96,6 @@
                             <h6 class="text-capitalize">Publication Trends Over Time</h6>
                             <p class="text-sm mb-0">
                                 <i class="fa fa-arrow-up text-success"></i>
-                                <!-- Optional text here -->
                             </p>
                         </div>
                         <div class="card-body p-3">
@@ -129,144 +113,21 @@
             </div>
         <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">
-                <div class="card ">
+                <div class="card">
                     <div class="card-header pb-0 p-3">
                         <div class="d-flex justify-content-between">
-                            <h6 class="mb-2">List of Publications</h6>
+                            <h6 class="mb-2">Topic Trends</h6>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table align-items-center ">
-                            <tbody>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="./img/icons/flags/US.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">United States</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">2500</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$230,900</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">29.9%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="./img/icons/flags/DE.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">Germany</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">3.900</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$440,000</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">40.22%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="./img/icons/flags/GB.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">Great Britain</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">1.400</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$190,700</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">23.44%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="w-30">
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <img src="./img/icons/flags/BR.png" alt="Country flag">
-                                            </div>
-                                            <div class="ms-4">
-                                                <p class="text-xs font-weight-bold mb-0">Country:</p>
-                                                <h6 class="text-sm mb-0">Brasil</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Sales:</p>
-                                            <h6 class="text-sm mb-0">562</h6>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Value:</p>
-                                            <h6 class="text-sm mb-0">$143,960</h6>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm">
-                                        <div class="col text-center">
-                                            <p class="text-xs font-weight-bold mb-0">Bounce:</p>
-                                            <h6 class="text-sm mb-0">32.14%</h6>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="card-body p-3">
+                        <div style="width: 100%;">
+                            <canvas id="topTopicsChart" 
+                                height="250">
+                            </canvas>
                     </div>
                 </div>
             </div>
+        </div>
             <div class="col-lg-5">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
@@ -391,6 +252,60 @@
                 scales: {
                     y: {
                         beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+
+   document.addEventListener("DOMContentLoaded", function () {
+        const labels = JSON.parse(`@json($topicLabels ?? [])`);
+        const counts = JSON.parse(`@json($topicCounts ?? [])`);
+
+        if (!Array.isArray(labels) || !Array.isArray(counts) || labels.length === 0) {
+            console.warn("Data chart kosong, chart tidak akan digambar.");
+            return;
+        }
+
+        const canvas = document.getElementById('topTopicsChart');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Topic Trends',
+                    data: counts,
+                    backgroundColor: [
+                        '#FF6384', '#FF9F40', '#FFCD56',
+                        '#4BC0C0', '#36A2EB', '#9966FF',
+                        '#C9CBCF', '#F67019', '#00A950', '#8E44AD'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 0,
+                            minRotation: 0,
+                            callback: function (value, index) {
+                                let label = this.getLabelForValue(value);
+                                return label.length > 15 ? label.substr(0, 15) + '…' : label;
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
                     }
                 }
             }

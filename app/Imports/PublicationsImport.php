@@ -10,7 +10,6 @@ class PublicationsImport implements ToModel
         return new Publication([
             'title' => $row[0],
             'year' => $row[1],
-            // sesuaikan dengan kolom Excel
         ]);
     }
 }
