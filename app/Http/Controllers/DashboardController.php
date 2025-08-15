@@ -14,9 +14,18 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $spreadsheet = IOFactory::load(storage_path('data\topic_assignments.xlsx'));
+        $topicPath = storage_path('data/topic_assignments.xlsx');
+        $topicListPath = storage_path('data/topics_list.xlsx');
+
+        $spreadsheet = IOFactory::load($topicPath);
         $sheet = $spreadsheet->getActiveSheet();
         $rows = $sheet->toArray();
+
+        $topicsListSpreadsheet = IOFactory::load($topicListPath);
+        $topicsListSheet = $topicsListSpreadsheet->getActiveSheet();
+        $topicsListRows = $topicsListSheet->toArray();
+        $topicsList = array_filter(array_map('trim', array_column($topicsListRows, 0)));
+        $totalTopics = count(array_unique($topicsList));
 
         $publicationTrends = Publication::select(DB::raw('tahun, COUNT(*) as total'))
             ->groupBy('tahun')
@@ -28,17 +37,9 @@ class DashboardController extends Controller
 
         $totalPublications = Publication::count();
 
-        $totalAuthors = Author::select('nama')
-            ->distinct()
-            ->count();
+        $totalAuthors = Author::distinct('nama')->count('nama');
 
-        $totalJournals = Publication::select('nama_jurnal')
-            ->distinct()
-            ->count();
-
-        $totalTopics = Publication::select('topik')
-            ->distinct()
-            ->count();
+        $totalJournals = Publication::distinct('nama_jurnal')->count('nama_jurnal');
 
         $topics = [];
         foreach ($rows as $i => $row) {
@@ -48,10 +49,8 @@ class DashboardController extends Controller
             $topicName = $row[4] ?? null;
 
             if ($topicId !== null && $topicId != -1 && $topicName) {
-                // Bersihkan nama topik
                 $cleanName = preg_replace('/^\d+_/', '', $topicName);
                 $cleanName = str_replace('_', ' ', $cleanName);
-
                 $topics[$cleanName] = ($topics[$cleanName] ?? 0) + 1;
             }
         }
