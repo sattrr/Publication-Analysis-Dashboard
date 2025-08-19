@@ -15,17 +15,35 @@ class DashboardController extends Controller
     public function index()
     {
         $topicPath = storage_path('data/topic_assignments.xlsx');
-        $topicListPath = storage_path('data/topics_list.xlsx');
-
         $spreadsheet = IOFactory::load($topicPath);
         $sheet = $spreadsheet->getActiveSheet();
         $rows = $sheet->toArray();
 
-        $topicsListSpreadsheet = IOFactory::load($topicListPath);
-        $topicsListSheet = $topicsListSpreadsheet->getActiveSheet();
-        $topicsListRows = $topicsListSheet->toArray();
-        $topicsList = array_filter(array_map('trim', array_column($topicsListRows, 0)));
-        $totalTopics = count(array_unique($topicsList));
+        $domainCounts = [];
+        $topicCounts = [];
+
+        foreach ($rows as $i => $row) {
+            if ($i === 0) continue;
+
+            $domain = $row[5] ?? null;
+            $topicName = $row[4] ?? null;
+
+            if ($domain) {
+                $domainCounts[$domain] = ($domainCounts[$domain] ?? 0) + 1;
+            }
+            if ($topicName && $topicName !== "-1") {
+                $topicCounts[$topicName] = ($topicCounts[$topicName] ?? 0) + 1;
+            }
+        }
+
+        arsort($domainCounts);
+        arsort($topicCounts);
+
+        $domainLabels = array_keys($domainCounts);
+        $domainValues = array_values($domainCounts);
+
+        $topicLabels = array_slice(array_keys($topicCounts), 0, 15);
+        $topicValues = array_slice(array_values($topicCounts), 0, 15);
 
         $publicationTrends = Publication::select(DB::raw('tahun, COUNT(*) as total'))
             ->groupBy('tahun')
@@ -36,30 +54,9 @@ class DashboardController extends Controller
         $totals = $publicationTrends->pluck('total');
 
         $totalPublications = Publication::count();
-
         $totalAuthors = Author::distinct('nama')->count('nama');
-
         $totalJournals = Publication::distinct('nama_jurnal')->count('nama_jurnal');
-
-        $topics = [];
-        foreach ($rows as $i => $row) {
-            if ($i === 0) continue;
-
-            $topicId = $row[2] ?? null;
-            $topicName = $row[4] ?? null;
-
-            if ($topicId !== null && $topicId != -1 && $topicName) {
-                $cleanName = preg_replace('/^\d+_/', '', $topicName);
-                $cleanName = str_replace('_', ' ', $cleanName);
-                $topics[$cleanName] = ($topics[$cleanName] ?? 0) + 1;
-            }
-        }
-
-        arsort($topics);
-        $topTopics = array_slice($topics, 0, 10, true);
-
-        $topicLabels = array_keys($topTopics);
-        $topicCounts = array_values($topTopics);
+        $totalTopics = count($topicCounts);
 
         return view('pages.dashboard', [
             'years' => $years,
@@ -68,8 +65,10 @@ class DashboardController extends Controller
             'totalAuthors' => $totalAuthors,
             'totalJournals' => $totalJournals,
             'totalTopics' => $totalTopics,
+            'domainLabels' => json_encode($domainLabels),
+            'domainValues' => json_encode($domainValues),
             'topicLabels' => $topicLabels,
-            'topicCounts' => $topicCounts,
+            'topicCounts' => $topicValues,
         ]);
     }
 }

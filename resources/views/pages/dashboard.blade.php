@@ -1,7 +1,6 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    {{-- @include('layouts.navbars.auth.topnav', ['title' => 'Dashboard']) --}}
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -120,10 +119,8 @@
                         </div>
                     </div>
                     <div class="card-body p-3">
-                        <div style="width: 100%;">
-                            <canvas id="topTopicsChart" 
-                                height="250">
-                            </canvas>
+                        <div style="width: 100%; height: 300px;">
+                            <canvas id="topTopicsChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -131,78 +128,14 @@
             <div class="col-lg-5">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">List of Topics</h6>
+                        <h6 class="mb-0">Topic Categories</h6>
                     </div>
                     <div class="card-body p-3">
-                        <ul class="list-group">
-                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                        <i class="ni ni-mobile-button text-white opacity-10"></i>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <h6 class="mb-1 text-dark text-sm">Devices</h6>
-                                        <span class="text-xs">250 in stock, <span class="font-weight-bold">346+
-                                                sold</span></span>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <button
-                                        class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
-                                            class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                        <i class="ni ni-tag text-white opacity-10"></i>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <h6 class="mb-1 text-dark text-sm">Tickets</h6>
-                                        <span class="text-xs">123 closed, <span class="font-weight-bold">15
-                                                open</span></span>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <button
-                                        class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
-                                            class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                        <i class="ni ni-box-2 text-white opacity-10"></i>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <h6 class="mb-1 text-dark text-sm">Error logs</h6>
-                                        <span class="text-xs">1 is active, <span class="font-weight-bold">40
-                                                closed</span></span>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <button
-                                        class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
-                                            class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                                        <i class="ni ni-satisfied text-white opacity-10"></i>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <h6 class="mb-1 text-dark text-sm">Happy users</h6>
-                                        <span class="text-xs font-weight-bold">+ 430</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <button
-                                        class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
-                                            class="ni ni-bold-right" aria-hidden="true"></i></button>
-                                </div>
-                            </li>
-                        </ul>
+                        <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                            <div style="width: 100%; max-width: 300px; height: 300px;">
+                                <canvas id="domainChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -245,14 +178,10 @@
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        display: true
-                    }
+                    legend: { display: true }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         });
@@ -299,13 +228,51 @@
                             minRotation: 0,
                             callback: function (value, index) {
                                 let label = this.getLabelForValue(value);
-                                return label.length > 15 ? label.substr(0, 15) + '…' : label;
+                                return label.length > 10 ? label.substr(2, 3) + '…' : label;
                             }
                         }
                     },
                     y: {
+                        type: 'logarithmic',
                         beginAtZero: true,
-                        ticks: { precision: 0 }
+                        ticks: {
+                            callback: function(value) {
+                                return Number(value.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const domainLabels = JSON.parse('{!! $domainLabels !!}');
+        const domainValues = JSON.parse('{!! $domainValues !!}');
+
+        const ctx = document.getElementById('domainChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: domainLabels,
+                datasets: [{
+                    data: domainValues,
+                    backgroundColor: [
+                        '#ff6384','#36a2eb','#ffcd56','#4bc0c0','#9966ff','#ff9f40'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 15,
+                            padding: 15
+                        }
                     }
                 }
             }
