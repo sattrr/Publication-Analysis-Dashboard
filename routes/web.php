@@ -26,4 +26,5 @@ Route::get('/home', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/publications', [PublicationController::class, 'index'])->name('publications');
+Route::get('/partial', [PublicationController::class, 'index'])->name('partial');
 Route::get('/authors', [AuthorController::class, 'index'])->name('authors');

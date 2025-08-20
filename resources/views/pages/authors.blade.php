@@ -34,10 +34,14 @@
                     width: 100%;
                 }
                 .table-compact thead th {
+                    position: sticky;
+                    top: 0;
+                    background-color: #f8f9fa;
+                    z-index: 10;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-size: 0.75rem;
+                    font-size: 0.9rem;
                     padding: 0.4rem 0.5rem;
                     vertical-align: middle;
                 }
@@ -61,8 +65,8 @@
                         <tr>
                             <th style="width: 20%;">NIP</th>
                             <th style="width: 20%;">ID Scopus</th>
-                            <th style="width: 40%;">Nama</th>
-                            <th style="width: 20%;">Total Publikasi</th>
+                            <th style="width: 30%;">Nama</th>
+                            <th style="width: 25%;">Total Publikasi</th>
                         </tr>
                     </thead>
                     <tbody>

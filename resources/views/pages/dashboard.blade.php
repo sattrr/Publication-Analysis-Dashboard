@@ -148,70 +148,98 @@
                 </div>
             </div>
         </div>
-        @include('layouts.footers.auth.footer')
     </div>
-    <div class="modal fade" id="publicationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">Publications List <span id="pubYear"></span></h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="publicationContent">
-                    <div class="text-center py-3">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-2">Loading...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="allTopicsModal" tabindex="-1" aria-labelledby="allTopicsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="allTopicsModalLabel">Topic Trends</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="allTopicsContent">
-                    <div class="text-center py-3" id="allTopicsLoading">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-2">Loading...</p>
-                    </div>
-                    <div id="allTopicsWrapper" style="width:100%; overflow-x:auto;">
-                        <canvas 
-                            id="allTopicsChart" 
-                            width="auto" 
-                            style="min-width:auto; height:300px;" 
-                            class="d-none">
-                        </canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="domainModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">Topic Categories</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center py-3" id="domainLoading">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-2">Loading...</p>
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center d-none" id="domainChartWrapper" style="min-height:400px;">
-                        <div style="width:100%; max-width:600px;">
-                            <canvas id="domainChartModal" style="max-height:350px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+<style>
+    .btn-sm {
+        background-color: #ffffffff;
+        border-color: #f7941e;
+        color: #f7941e;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-sm:hover {
+        background-color: #e67300 !important;
+        border-color: #e67300 !important;
+        color: #fff !important;
+    }
+</style>
 @endsection
+
+@push('modals')
+<div class="modal fade" id="publicationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Publications List <span id="pubYear"></span></h6>
+                <button type="button" class="modal-close-x" data-bs-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="publicationContent" style="width:100%; min-height:400px;">
+                <div class="text-center py-3">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="allTopicsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Topic Trends</h5>
+                <button type="button" class="modal-close-x" data-bs-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="allTopicsContent">
+                <div class="text-center py-3" id="allTopicsLoading">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Loading...</p>
+                </div>
+                <div id="allTopicsWrapper" style="width:100%; overflow-x:auto;">
+                    <canvas id="allTopicsChart" style="height:250px;" class="d-none"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="domainModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Topic Categories</h6>
+                <button type="button" class="modal-close-x" data-bs-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-3" id="domainLoading">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2">Loading...</p>
+                </div>
+                <div class="d-flex justify-content-center align-items-center d-none" id="domainChartWrapper" style="min-height:400px;">
+                    <div style="width:100%; max-width:600px;">
+                        <canvas id="domainChartModal" style="max-height:350px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-close-x {
+        background: transparent;
+        border: none;
+        font-size: 2rem;
+        font-weight: 300;
+        line-height: 1;
+        color: #000;
+        cursor: pointer;
+        padding: 0;
+    }
+    .modal-close-x:hover {
+        color: #ddddddff;
+    }
+</style>
+@endpush
 
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -229,16 +257,36 @@
         .catch(err => {
             document.getElementById("publicationContent").innerHTML =
                 `<p class="text-danger">Gagal memuat data publikasi.</p>`;
+            console.error(err);
         });
     }
 
-    document.addEventListener('click', function(e){
+    document.addEventListener('click', function(e) {
         const link = e.target.closest('#publicationContent .pagination a');
         if (!link) return;
         e.preventDefault();
         const url = link.href + (link.href.includes('?') ? '&' : '?') + 'partial=1';
         loadPublicationPartial(url);
     });
+
+    document.addEventListener('submit', function(e) {
+        const form = e.target.closest('#publicationSearchForm');
+        if (!form) return;
+        e.preventDefault();
+        const url = form.action + '?' + new URLSearchParams(new FormData(form)).toString() + '&partial=1';
+        loadPublicationPartial(url);
+    });
+
+    function openPublicationModal(year = null) {
+        const modal = new bootstrap.Modal(document.getElementById('publicationModal'));
+        modal.show();
+
+        let url = "{{ route('partial') }}";
+        if (year) url += '?year=' + year + '&partial=1';
+        else url += '?partial=1';
+
+        loadPublicationPartial(url);
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         const canvas = document.getElementById('chart-line');

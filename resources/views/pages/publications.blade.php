@@ -36,10 +36,14 @@
                     width: 100%;
                 }
                 .table-compact thead th {
+                    position: sticky;
+                    top: 0;
+                    background-color: #f8f9fa;
+                    z-index: 10;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-size: 0.75rem;
+                    font-size: 0.9rem;
                     padding: 0.4rem 0.5rem;
                     vertical-align: middle;
                 }
@@ -60,12 +64,12 @@
                 <table class="table table-sm table-hover align-middle mb-0 table-compact">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 35%">Judul</th>
+                            <th style="width: 30%">Judul</th>
                             <th style="width: 15%">Author</th>
                             <th style="width: 10%">Jenis Publikasi</th>
                             <th style="width: 10%">Nama Jurnal</th>
                             <th style="width: 5%">Tautan</th>
-                            <th style="width: 5%">DOI</th>
+                            <th style="width: 8%">DOI</th>
                             <th style="width: 5%">Tahun</th>
                             <th style="width: 7%">Sumber</th>
                         </tr>

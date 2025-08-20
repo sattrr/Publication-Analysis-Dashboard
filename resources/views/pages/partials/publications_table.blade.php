@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-end mb-3">
-    <form method="GET" action="{{ route('publications') }}" class="d-flex align-items-center">
+    <form id="publicationSearchForm" method="GET" action="{{ route('partial') }}" class="d-flex align-items-center">
         @foreach(request()->except(['sort', 'direction', 'search']) as $key => $value)
             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
         @endforeach
@@ -7,9 +7,9 @@
             name="search" 
             value="{{ request('search') }}" 
             class="form-control form-control-sm me-2" 
-            style="width: 300px;"
+            style="width: 250px;"
             placeholder="Search ...">
-        <select name="sort" class="form-select form-select-sm me-2" style="width: 140px;" onchange="this.form.submit()">
+        <select name="sort" class="form-select form-select-sm me-2" style="width: 100px;" onchange="this.form.submit()">
             <option value="tahun" {{ $sort === 'tahun' ? 'selected' : '' }}>Tahun</option>
             <option value="judul" {{ $sort === 'judul' ? 'selected' : '' }}>Judul</option>
             <option value="nama" {{ $sort === 'nama' ? 'selected' : '' }}>Author</option>
@@ -17,7 +17,7 @@
             <option value="nama_jurnal" {{ $sort === 'nama_jurnal' ? 'selected' : '' }}>Nama Jurnal</option>
             <option value="sumber_data" {{ $sort === 'sumber_data' ? 'selected' : '' }}>Sumber</option>
         </select>
-        <select name="direction" class="form-select form-select-sm" style="width: 60px;" onchange="this.form.submit()">
+        <select name="direction" class="form-select form-select-sm" style="width: 50px;" onchange="this.form.submit()">
             <option value="asc" {{ $direction === 'asc' ? 'selected' : '' }}>⬆</option>
             <option value="desc" {{ $direction === 'desc' ? 'selected' : '' }}>⬇</option>
         </select>
@@ -27,14 +27,14 @@
     <table class="table table-sm table-hover align-middle mb-0 table-compact w-100">
         <thead class="table-light">
             <tr>
-                <th style="width: 35%">Judul</th>
-                <th style="width: 15%">Author</th>
-                <th style="width: 10%">Jenis Publikasi</th>
-                <th style="width: 10%">Nama Jurnal</th>
-                <th style="width: 5%">Tautan</th>
-                <th style="width: 5%">DOI</th>
-                <th style="width: 5%">Tahun</th>
-                <th style="width: 7%">Sumber</th>
+                <th style="width: 28%">Judul</th>
+                <th style="width: 14%">Author</th>
+                <th style="width: 14%">Jenis Publikasi</th>
+                <th style="width: 12%">Nama Jurnal</th>
+                <th style="width: 6%">Tautan</th>
+                <th style="width: 8%">DOI</th>
+                <th style="width: 7%">Tahun</th>
+                <th style="width: 10%">Sumber</th>
             </tr>
         </thead>
         <tbody>
@@ -77,10 +77,14 @@
     }
 
     .table-compact thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 0.8rem;
+        font-size: 0.6rem;
         padding: 0.45rem 0.6rem;
         vertical-align: middle;
     }
@@ -94,7 +98,7 @@
     }
 
     .table-container {
-        max-height: 65vh;
+        max-height: 40vh;
         overflow-y: auto;
         overflow-x: hidden;
         margin: 0;
