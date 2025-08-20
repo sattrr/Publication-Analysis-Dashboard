@@ -31,6 +31,10 @@ class PublicationController extends Controller
             });
         }
 
+        if ($request->has('nip') && !empty($request->nip)) {
+            $query->where('nip', $request->nip);
+        }
+
         $publications = $query->orderBy($sort, $direction)
             ->paginate(25)
             ->withQueryString();

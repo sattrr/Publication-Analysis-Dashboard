@@ -53,12 +53,22 @@
                     vertical-align: top;
                 }
                 .table-container {
-                    height: 70dvh;
+                    max-height: 70dvh;
                     overflow-y: auto;
                     margin: 0 20px;
+                    min-width: 0;
+                }
+                .author-link {
+                    color: #7e7e7eff;
+                    text-decoration: none;
+                    transition: color 0.2s;
+                }
+
+                .author-link:hover {
+                    color: orange;
                 }
             </style>
-
+            
             <div class="table-responsive table-container">
                 <table class="table table-sm table-hover align-middle mb-0 table-compact">
                     <thead class="table-light">
@@ -75,7 +85,15 @@
                             <td>{{ $author->nip }}</td>
                             <td>{{ $author->id_scopus }}</td>
                             <td>{{ $author->nama_formatted }}</td>
-                            <td>{{ $author->total_publikasi }}</td>
+                            <td>
+                                @if($author->total_publikasi > 0)
+                                    <a href="javascript:void(0)" class="author-link fw-bold" onclick="openPublicationModal('{{ $author->nip }}')">
+                                        {{ $author->total_publikasi }}
+                                    </a>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
                         </tr>
                         @empty
                         <tr>
@@ -97,3 +115,63 @@
     </div>
 </div>
 @endsection
+
+@push('modals')
+<div class="modal fade" id="publicationModal" tabindex="-1" aria-labelledby="publicationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Author Publications</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="publicationContent">
+                <p class="text-center text-muted">Loading...</p>
+            </div>
+        </div>
+    </div>
+</div>
+@endpush
+
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function loadPublicationPartial(url) {
+        fetch(url, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("publicationContent").innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById("publicationContent").innerHTML =
+                `<p class="text-danger">Gagal memuat data publikasi.</p>`;
+            console.error(err);
+        });
+    }
+
+    function openPublicationModal(nip) {
+        const modal = new bootstrap.Modal(document.getElementById('publicationModal'));
+        modal.show();
+
+        let url = "{{ route('partial') }}" + '?nip=' + nip + '&partial=1';
+        loadPublicationPartial(url);
+    }
+
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('#publicationContent .pagination a');
+        if (!link) return;
+        e.preventDefault();
+        const url = link.href + (link.href.includes('?') ? '&' : '?') + 'partial=1';
+        loadPublicationPartial(url);
+    });
+
+    document.addEventListener('submit', function(e) {
+        const form = e.target.closest('#publicationSearchForm');
+        if (!form) return;
+        e.preventDefault();
+        const url = form.action + '?' + new URLSearchParams(new FormData(form)).toString() + '&partial=1';
+        loadPublicationPartial(url);
+    });
+</script>
+@endpush
