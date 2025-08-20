@@ -17,9 +17,19 @@ class PublicationController extends Controller
             $sort = 'tahun';
         }
 
-        $publications = Publication::orderBy($sort, $direction)
+        $query = Publication::query();
+
+        if ($request->has('year')) {
+            $query->where('tahun', $request->year);
+        }
+
+        $publications = $query->orderBy($sort, $direction)
             ->paginate(25)
             ->withQueryString();
+
+        if ($request->ajax() || $request->has('partial')) {
+            return view('pages.partials.publications_table', compact('publications', 'sort', 'direction'));
+        }
 
         return view('pages.publications', compact('publications', 'sort', 'direction'));
     }

@@ -142,11 +142,51 @@
         </div>
         @include('layouts.footers.auth.footer')
     </div>
+    <div class="modal fade" id="publicationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Daftar Publikasi <span id="pubYear"></span></h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="publicationContent">
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Memuat data...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    function loadPublicationPartial(url) {
+        fetch(url, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("publicationContent").innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById("publicationContent").innerHTML =
+                `<p class="text-danger">Gagal memuat data publikasi.</p>`;
+        });
+    }
+
+    document.addEventListener('click', function(e){
+        const link = e.target.closest('#publicationContent .pagination a');
+        if (!link) return;
+        e.preventDefault();
+        const url = link.href + (link.href.includes('?') ? '&' : '?') + 'partial=1';
+        loadPublicationPartial(url);
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const canvas = document.getElementById('chart-line');
         if (!canvas) return;
@@ -172,16 +212,45 @@
                     tension: 0.4,
                     fill: true,
                     borderWidth: 2,
-                    pointRadius: 3
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)'
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { display: true }
+                    legend: { display: true },
+                    tooltip: { enabled: true }
                 },
                 scales: {
                     y: { beginAtZero: true }
+                },
+                onClick: (evt, activeEls) => {
+                    if (activeEls.length > 0) {
+                        let chart = activeEls[0].element.$context.chart;
+                        let index = activeEls[0].index;
+                        let year = chart.data.labels[index];
+
+                        document.getElementById("pubYear").innerText = `(${year})`;
+
+                        let modal = new bootstrap.Modal(document.getElementById("publicationModal"));
+                        modal.show();
+
+                        fetch(`/publications?year=${year}&partial=1`, {
+                            headers: {
+                                "X-Requested-With": "XMLHttpRequest"
+                            }
+                        })
+                        .then(res => res.text())
+                        .then(html => {
+                            document.getElementById("publicationContent").innerHTML = html;
+                        })
+                        .catch(err => {
+                            document.getElementById("publicationContent").innerHTML =
+                                `<p class="text-danger">Gagal memuat data publikasi.</p>`;
+                        });
+                    }
                 }
             }
         });
