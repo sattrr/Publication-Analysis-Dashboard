@@ -57,7 +57,8 @@
                 .table-container {
                     height: 70dvh;
                     overflow-y: auto;
-                    margin: 0 20px;
+                    margin: 0;
+                    padding: 1%;
                 }
             </style>
             <div class="table-responsive table-container">

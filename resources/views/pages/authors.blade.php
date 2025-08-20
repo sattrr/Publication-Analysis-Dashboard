@@ -41,7 +41,7 @@
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-size: 0.9rem;
+                    font-size: 0.9rem !important;
                     padding: 0.4rem 0.5rem;
                     vertical-align: middle;
                 }
@@ -55,8 +55,16 @@
                 .table-container {
                     max-height: 70dvh;
                     overflow-y: auto;
-                    margin: 0 20px;
+                    margin: 0;
+                    padding: 1%;
                     min-width: 0;
+                    width: 100%;
+                }
+                .table-compact.table-sm th {
+                    font-size: 0.9rem !important;
+                }
+                .table-compact.table-sm td {
+                    font-size: 0.85rem !important;
                 }
                 .author-link {
                     color: #7e7e7eff;
@@ -65,11 +73,12 @@
                 }
 
                 .author-link:hover {
-                    color: orange;
+                    color: #e26d29ff;
                 }
             </style>
             
-            <div class="table-responsive table-container">
+        <div class="card-body p-0" style="position: relative;">
+            <div class="table-container" style="overflow-y: auto; max-height: 70vh;">
                 <table class="table table-sm table-hover align-middle mb-0 table-compact">
                     <thead class="table-light">
                         <tr>
@@ -117,12 +126,12 @@
 @endsection
 
 @push('modals')
-<div class="modal fade" id="publicationModal" tabindex="-1" aria-labelledby="publicationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal fade" id="publicationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Author Publications</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="modal-close-x" data-bs-dismiss="modal" aria-label="Close">×</button>
             </div>
             <div class="modal-body" id="publicationContent">
                 <p class="text-center text-muted">Loading...</p>
@@ -130,6 +139,24 @@
         </div>
     </div>
 </div>
+
+<style>
+    .modal-close-x {
+        background: transparent;
+        border: none;
+        font-size: 2rem;
+        font-weight: 300;
+        line-height: 1;
+        color: #000;
+        cursor: pointer;
+        padding: 0;
+    }
+    .modal-close-x:hover {
+        color: #ddddddff;
+    }
+    .modal { z-index: 2000 !important; }
+    .modal-backdrop { z-index: 1999 !important; }
+</style>
 @endpush
 
 @push('js')
@@ -151,10 +178,15 @@
     }
 
     function openPublicationModal(nip) {
+        console.log('Opening modal for NIP:', nip); // debug
+        activeNip = nip;
         const modal = new bootstrap.Modal(document.getElementById('publicationModal'));
         modal.show();
 
-        let url = "{{ route('partial') }}" + '?nip=' + nip + '&partial=1';
+        document.getElementById("publicationContent").innerHTML = '<p class="text-center text-muted">Loading...</p>';
+
+        let url = "{{ route('partial') }}" + '?nip=' + encodeURIComponent(nip) + '&partial=1&_=' + new Date().getTime();
+        console.log('Fetching URL:', url); // debug
         loadPublicationPartial(url);
     }
 
@@ -162,7 +194,11 @@
         const link = e.target.closest('#publicationContent .pagination a');
         if (!link) return;
         e.preventDefault();
-        const url = link.href + (link.href.includes('?') ? '&' : '?') + 'partial=1';
+
+        const content = document.getElementById("publicationContent");
+        const nip = content.dataset.nip;
+
+        const url = link.href.split('?')[0] + '?nip=' + encodeURIComponent(nip) + '&partial=1&_=' + new Date().getTime();
         loadPublicationPartial(url);
     });
 
@@ -170,7 +206,11 @@
         const form = e.target.closest('#publicationSearchForm');
         if (!form) return;
         e.preventDefault();
-        const url = form.action + '?' + new URLSearchParams(new FormData(form)).toString() + '&partial=1';
+
+        const content = document.getElementById("publicationContent");
+        const nip = content.dataset.nip;
+
+        const url = form.action + '?' + new URLSearchParams(new FormData(form)).toString() + '&nip=' + encodeURIComponent(nip) + '&partial=1&_=' + new Date().getTime();
         loadPublicationPartial(url);
     });
 </script>
