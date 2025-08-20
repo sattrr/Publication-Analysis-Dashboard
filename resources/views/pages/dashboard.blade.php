@@ -17,7 +17,7 @@
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                                    <i class="ni ni-single-copy-04 text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                                    <i class="ni ni-single-02 text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                                    <i class="ni ni-world-2 text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -114,8 +114,11 @@
             <div class="col-lg-7 mb-lg-0 mb-4">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-2">Topic Trends</h6>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#allTopicsModal">
+                                More Details
+                            </button>
                         </div>
                     </div>
                     <div class="card-body p-3">
@@ -128,7 +131,12 @@
             <div class="col-lg-5">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Topic Categories</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-2">Topic Categories</h6>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#domainModal">
+                                More Details
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body p-3">
                         <div class="d-flex flex-column align-items-center justify-content-center text-center">
@@ -146,13 +154,58 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title">Daftar Publikasi <span id="pubYear"></span></h6>
+                    <h6 class="modal-title">Publications List <span id="pubYear"></span></h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="publicationContent">
                     <div class="text-center py-3">
                         <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-2">Memuat data...</p>
+                        <p class="mt-2">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="allTopicsModal" tabindex="-1" aria-labelledby="allTopicsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="allTopicsModalLabel">Topic Trends</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="allTopicsContent">
+                    <div class="text-center py-3" id="allTopicsLoading">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading...</p>
+                    </div>
+                    <div id="allTopicsWrapper" style="width:100%; overflow-x:auto;">
+                        <canvas 
+                            id="allTopicsChart" 
+                            width="auto" 
+                            style="min-width:auto; height:300px;" 
+                            class="d-none">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="domainModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Topic Categories</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center py-3" id="domainLoading">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading...</p>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center d-none" id="domainChartWrapper" style="min-height:400px;">
+                        <div style="width:100%; max-width:600px;">
+                            <canvas id="domainChartModal" style="max-height:350px;"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,7 +258,7 @@
             data: {
                 labels: years,
                 datasets: [{
-                    label: 'Jumlah Publikasi',
+                    label: 'Total Publications',
                     data: totals,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: gradient,
@@ -261,7 +314,7 @@
         const counts = JSON.parse(`@json($topicCounts ?? [])`);
 
         if (!Array.isArray(labels) || !Array.isArray(counts) || labels.length === 0) {
-            console.warn("Data chart kosong, chart tidak akan digambar.");
+            console.warn("Empty data..");
             return;
         }
 
@@ -297,7 +350,7 @@
                             minRotation: 0,
                             callback: function (value, index) {
                                 let label = this.getLabelForValue(value);
-                                return label.length > 10 ? label.substr(2, 3) + '…' : label;
+                                return label.length > 10 ? label.substr(0, 1) + '…' : label;
                             }
                         }
                     },
@@ -314,7 +367,72 @@
             }
         });
     });
-    
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const allLabels = JSON.parse(`@json($allTopicLabels ?? [])`);
+        const allCounts = JSON.parse(`@json($allTopicValues ?? [])`);
+
+        const modal = document.getElementById('allTopicsModal');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                const spinner = document.getElementById("allTopicsLoading");
+                const canvas = document.getElementById("allTopicsChart");
+
+                if (!canvas || !allLabels.length) return;
+
+                const ctxAll = canvas.getContext('2d');
+
+                new Chart(ctxAll, {
+                    type: 'bar',
+                    data: {
+                        labels: allLabels,
+                        datasets: [{
+                            label: 'Topic Trends',
+                            data: allCounts,
+                            backgroundColor: [
+                                '#FF6384', '#FF9F40', '#FFCD56',
+                                '#4BC0C0', '#36A2EB', '#9966FF',
+                                '#C9CBCF', '#F67019', '#00A950', '#8E44AD'
+                            ],
+                            borderWidth: 0,
+                            categoryPercentage: 0.6,
+                            barPercentage: 3.5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    callback: function (value) {
+                                        let label = this.getLabelForValue(value);
+                                        return label.length > 10 ? label.substr(0, 1) + '…' : label;
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'logarithmic',
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function (value) {
+                                        return Number(value.toString());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                spinner.classList.add("d-none");
+                canvas.classList.remove("d-none");
+            });
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
         const domainLabels = JSON.parse('{!! $domainLabels !!}');
         const domainValues = JSON.parse('{!! $domainValues !!}');
@@ -338,13 +456,46 @@
                     legend: {
                         display: true,
                         position: 'bottom',
-                        labels: {
-                            boxWidth: 15,
-                            padding: 15
-                        }
+                        labels: { boxWidth: 15, padding: 15 }
                     }
                 }
             }
+        });
+
+        const modal = document.getElementById('domainModal');
+        modal.addEventListener('shown.bs.modal', function () {
+            const spinner = document.getElementById("domainLoading");
+            const wrapper = document.getElementById("domainChartWrapper");
+            const ctxModal = document.getElementById('domainChartModal').getContext('2d');
+
+            if (!ctxModal.chart) {
+                ctxModal.chart = new Chart(ctxModal, {
+                    type: 'doughnut',
+                    data: {
+                        labels: domainLabels,
+                        datasets: [{
+                            data: domainValues,
+                            backgroundColor: [
+                                '#ff6384','#36a2eb','#ffcd56','#4bc0c0','#9966ff','#ff9f40'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: { boxWidth: 20, padding: 20 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            spinner.classList.add("d-none");
+            wrapper.classList.remove("d-none");
         });
     });
 </script>

@@ -69,6 +69,8 @@ class DashboardController extends Controller
             'domainValues' => json_encode($domainValues),
             'topicLabels' => $topicLabels,
             'topicCounts' => $topicValues,
+            'allTopicLabels' => array_keys($topicCounts),
+            'allTopicValues' => array_values($topicCounts),
         ]);
     }
 }

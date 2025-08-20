@@ -12,9 +12,19 @@ class AuthorController extends Controller
         $sort = $request->get('sort', 'total_publikasi');
         $direction = $request->get('direction', 'desc');
 
+        $query = Author::query();
+
         $authors = Author::uniqueAuthors($sort, $direction)
-            ->paginate(25)
-            ->withQueryString();
+        ->when($request->filled('search'), function ($q) use ($request) {
+            $search = $request->search;
+            $q->where(function ($q2) use ($search) {
+                $q2->where('nama', 'like', "%{$search}%")
+                ->orWhere('nip', 'like', "%{$search}%")
+                ->orWhere('id_scopus', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(25)
+        ->withQueryString();
 
         return view('pages.authors', compact('authors', 'sort', 'direction'));
     }

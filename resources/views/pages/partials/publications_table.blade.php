@@ -1,3 +1,28 @@
+<div class="d-flex justify-content-end mb-3">
+    <form method="GET" action="{{ route('publications') }}" class="d-flex align-items-center">
+        @foreach(request()->except(['sort', 'direction', 'search']) as $key => $value)
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endforeach
+        <input type="text" 
+            name="search" 
+            value="{{ request('search') }}" 
+            class="form-control form-control-sm me-2" 
+            style="width: 300px;"
+            placeholder="Search ...">
+        <select name="sort" class="form-select form-select-sm me-2" style="width: 140px;" onchange="this.form.submit()">
+            <option value="tahun" {{ $sort === 'tahun' ? 'selected' : '' }}>Tahun</option>
+            <option value="judul" {{ $sort === 'judul' ? 'selected' : '' }}>Judul</option>
+            <option value="nama" {{ $sort === 'nama' ? 'selected' : '' }}>Author</option>
+            <option value="jenis_publikasi" {{ $sort === 'jenis_publikasi' ? 'selected' : '' }}>Jenis Publikasi</option>
+            <option value="nama_jurnal" {{ $sort === 'nama_jurnal' ? 'selected' : '' }}>Nama Jurnal</option>
+            <option value="sumber_data" {{ $sort === 'sumber_data' ? 'selected' : '' }}>Sumber</option>
+        </select>
+        <select name="direction" class="form-select form-select-sm" style="width: 60px;" onchange="this.form.submit()">
+            <option value="asc" {{ $direction === 'asc' ? 'selected' : '' }}>⬆</option>
+            <option value="desc" {{ $direction === 'desc' ? 'selected' : '' }}>⬇</option>
+        </select>
+    </form>
+</div>
 <div class="table-responsive table-container">
     <table class="table table-sm table-hover align-middle mb-0 table-compact w-100">
         <thead class="table-light">

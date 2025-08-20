@@ -4,12 +4,18 @@
 <div class="container-fluid py-2">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-            <h6 class="mb-0 fw-bold">Daftar Publikasi</h6>
+            <h6 class="mb-0 fw-bold">Publications List</h6>
             <form method="GET" action="{{ route('publications') }}" class="d-flex align-items-center">
                 @foreach(request()->except(['sort', 'direction']) as $key => $value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                 @endforeach
-                <select name="sort" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                <input type="text" 
+                    name="search" 
+                    value="{{ request('search') }}" 
+                    class="form-control form-control-sm me-2" 
+                    style="width: 300px;"
+                    placeholder="Search ...">
+                <select name="sort" class="form-select form-select-sm me-2" style="width: 140px;" onchange="this.form.submit()">
                     <option value="tahun" {{ $sort === 'tahun' ? 'selected' : '' }}>Tahun</option>
                     <option value="judul" {{ $sort === 'judul' ? 'selected' : '' }}>Judul</option>
                     <option value="nama" {{ $sort === 'nama' ? 'selected' : '' }}>Author</option>
@@ -17,7 +23,7 @@
                     <option value="nama_jurnal" {{ $sort === 'nama_jurnal' ? 'selected' : '' }}>Nama Jurnal</option>
                     <option value="sumber_data" {{ $sort === 'sumber_data' ? 'selected' : '' }}>Sumber</option>
                 </select>
-                <select name="direction" class="form-select form-select-sm" onchange="this.form.submit()">
+                <select name="direction" class="form-select form-select-sm" style="width: 60px;" onchange="this.form.submit()">
                     <option value="asc" {{ $direction === 'asc' ? 'selected' : '' }}>⬆</option>
                     <option value="desc" {{ $direction === 'desc' ? 'selected' : '' }}>⬇</option>
                 </select>
@@ -45,7 +51,7 @@
                     vertical-align: top;
                 }
                 .table-container {
-                    max-height: 500px;
+                    height: 70dvh;
                     overflow-y: auto;
                     margin: 0 20px;
                 }

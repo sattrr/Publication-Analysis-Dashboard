@@ -23,6 +23,14 @@ class PublicationController extends Controller
             $query->where('tahun', $request->year);
         }
 
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'LIKE', "%{$search}%")
+                ->orWhere('nama', 'LIKE', "%{$search}%");
+            });
+        }
+
         $publications = $query->orderBy($sort, $direction)
             ->paginate(25)
             ->withQueryString();
