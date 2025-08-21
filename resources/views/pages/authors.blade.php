@@ -162,6 +162,8 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    let activeNip = null;
+
     function loadPublicationPartial(url) {
         fetch(url, {
             headers: { "X-Requested-With": "XMLHttpRequest" }
@@ -178,7 +180,7 @@
     }
 
     function openPublicationModal(nip) {
-        console.log('Opening modal for NIP:', nip); // debug
+        console.log('Opening modal for NIP:', nip);
         activeNip = nip;
         const modal = new bootstrap.Modal(document.getElementById('publicationModal'));
         modal.show();
@@ -186,7 +188,7 @@
         document.getElementById("publicationContent").innerHTML = '<p class="text-center text-muted">Loading...</p>';
 
         let url = "{{ route('partial') }}" + '?nip=' + encodeURIComponent(nip) + '&partial=1&_=' + new Date().getTime();
-        console.log('Fetching URL:', url); // debug
+        console.log('Fetching URL:', url);
         loadPublicationPartial(url);
     }
 
@@ -195,11 +197,10 @@
         if (!link) return;
         e.preventDefault();
 
-        const content = document.getElementById("publicationContent");
-        const nip = content.dataset.nip;
-
-        const url = link.href.split('?')[0] + '?nip=' + encodeURIComponent(nip) + '&partial=1&_=' + new Date().getTime();
-        loadPublicationPartial(url);
+        const url = new URL(link.href);
+        url.searchParams.set('nip', activeNip);
+        url.searchParams.set('partial', 1);
+        loadPublicationPartial(url.toString());
     });
 
     document.addEventListener('submit', function(e) {
@@ -207,10 +208,11 @@
         if (!form) return;
         e.preventDefault();
 
-        const content = document.getElementById("publicationContent");
-        const nip = content.dataset.nip;
+        const formData = new FormData(form);
+        formData.set('nip', activeNip);
+        formData.set('partial', 1);
 
-        const url = form.action + '?' + new URLSearchParams(new FormData(form)).toString() + '&nip=' + encodeURIComponent(nip) + '&partial=1&_=' + new Date().getTime();
+        const url = form.action + '?' + new URLSearchParams(formData).toString();
         loadPublicationPartial(url);
     });
 </script>
