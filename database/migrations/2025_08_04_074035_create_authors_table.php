@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration {
     public function up(): void
     {
-        // Create schema 'penelitian' if not exists
         DB::statement('CREATE SCHEMA IF NOT EXISTS penelitian');
 
-        // Create table within 'penelitian' schema
         Schema::create('penelitian.publikasi', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('uuid_in(md5(now()::text)::cstring)'));
             $table->string('nip', 30)->nullable();

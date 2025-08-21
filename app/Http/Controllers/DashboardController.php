@@ -42,8 +42,8 @@ class DashboardController extends Controller
         $domainLabels = array_keys($domainCounts);
         $domainValues = array_values($domainCounts);
 
-        $topicLabels = array_slice(array_keys($topicCounts), 0, 15);
-        $topicValues = array_slice(array_values($topicCounts), 0, 15);
+        $topicLabels = array_slice(array_keys($topicCounts), 0, 10);
+        $topicValues = array_slice(array_values($topicCounts), 0, 10);
 
         $publicationTrends = Publication::select(DB::raw('tahun, COUNT(*) as total'))
             ->groupBy('tahun')
