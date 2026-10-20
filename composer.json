@@ -20,6 +20,7 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.0",
+        "revolution/laravel-vercel-installer": "^1.2",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -63,6 +64,9 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
+        },
+        "platform": {
+            "php": "8.3.0"
         }
     },
     "minimum-stability": "stable",
